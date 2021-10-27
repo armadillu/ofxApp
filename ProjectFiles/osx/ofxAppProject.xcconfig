@@ -5,7 +5,7 @@ EXT_ADDONS_PATH = $(OF_PATH)/../ExternalAddons
 
 //OF official addons
 H_OFX_OSC = $(ADDONS_PATH)/ofxOsc/libs/oscpack/src $(ADDONS_PATH)/ofxOsc/libs/oscpack/src/osc $(ADDONS_PATH)/ofxOsc/src $(ADDONS_PATH)/ofxOsc/libs/oscpack/src/ip
-H_OFX_OPENCV = $(ADDONS_PATH)/ofxOpenCv/libs/opencv/include $(ADDONS_PATH)/ofxOpenCv/src $(ADDONS_PATH)/ofxOpenCv/libs/opencv/include/opencv
+H_OFX_OPENCV = $(ADDONS_PATH)/ofxOpenCv/libs/opencv/include $(ADDONS_PATH)/ofxOpenCv/src $(ADDONS_PATH)/ofxOpenCv/libs/opencv/include/opencv $(ADDONS_PATH)/ofxOpenCv/libs/opencv/include/opencv4
 H_OFX_POCO = $(ADDONS_PATH)/ofxPoco/libs/poco/include $(ADDONS_PATH)/ofxPoco/libs/openssl/include $(ADDONS_PATH)/ofxPoco/src
 H_OFX_XMLSETTINGS = $(ADDONS_PATH)/ofxXmlSettings/libs $(ADDONS_PATH)/ofxXmlSettings/src
 H_OFX_NETWORK = $(ADDONS_PATH)/ofxNetwork/src
