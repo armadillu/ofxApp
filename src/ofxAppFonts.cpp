@@ -60,18 +60,18 @@ void ofxAppFonts::loadFontStashFonts(){
 
 	if(settings.exists("Fonts/ofxFontStash")){
 
-		ofxJSON json = settings.getJson("Fonts/ofxFontStash");
+		ofJson json = settings.getJson("Fonts/ofxFontStash");
 
-		if(json.isObject()){
+		if(json.is_object()){
 
 			for( auto itr = json.begin(); itr != json.end(); itr++ ) { //walk all user fonts
-				std::string fontName = itr.key().asString();
-				std::string fontFile = (*itr)["fontFile"].asString();
-				int atlasSize = (*itr)["atlasSize"].asInt();
-				float lineH = (*itr)["lineHeight"].asFloat();
-				bool mipmaps = (*itr)["mipmaps"].asBool();
-				int mipmapPadding = (*itr)["mipmapPadding"].asInt();
-				float uiScale = (*itr)["uiScale"].asFloat();
+				std::string fontName = itr.key();
+				std::string fontFile = (*itr)["fontFile"];
+				int atlasSize = (*itr)["atlasSize"];
+				float lineH = (*itr)["lineHeight"];
+				bool mipmaps = (*itr)["mipmaps"];
+				int mipmapPadding = (*itr)["mipmapPadding"];
+				float uiScale = (*itr)["uiScale"];
 
 				ofxApp::utils::assertFileExists(fontFile);
 				ofxFontStash * font = new ofxFontStash();
@@ -85,8 +85,8 @@ void ofxAppFonts::loadFontStashFonts(){
 							uiScale 	//ui Scale (per-char texture upscale)
 						   );
 
-				if (!(*itr)["kerning"].isNull()) {
-					bool doKerning = (*itr)["kerning"].asBool();
+				if ((*itr).contains("fontSize")) {
+					bool doKerning = (*itr)["kerning"];
 					font->setKerning(doKerning);
 				}
 
@@ -99,8 +99,8 @@ void ofxAppFonts::loadFontStashFonts(){
 				}
 
 				float charSpacing = 0;
-				if(!(*itr)["charSpacing"].isNull()){
-					charSpacing = (*itr)["charSpacing"].asFloat();
+				if((*itr).contains("charSpacing")){
+					charSpacing = (*itr)["charSpacing"];
 					font->setCharacterSpacing(charSpacing);
 					ofLogNotice("ofxAppFonts") << "Setting custom Character Spacing for font \""<< fontName << "\" : " << charSpacing;
 				}
@@ -118,12 +118,12 @@ void ofxAppFonts::loadFontStash2Fonts(){
 
 	if(settings.exists("Fonts/ofxFontStash2/fonts")){
 
-		ofxJSON json = settings.getJson("Fonts/ofxFontStash2/fonts");
+		ofJson json = settings.getJson("Fonts/ofxFontStash2/fonts");
 
-		if(json.isObject()){
+		if(json.is_object()){
 			for( auto itr = json.begin(); itr != json.end(); itr++ ) { //walk all user fonts
-				std::string fontName = itr.key().asString();
-				std::string fontFile = (*itr).asString();
+				std::string fontName = itr.key();
+				std::string fontFile = (*itr);
 				ofxApp::utils::assertFileExists(fontFile);
 				bool ok = fonts2.addFont(fontName, fontFile);
 				if(!ok){
@@ -161,33 +161,33 @@ void ofxAppFonts::loadFontStash2Styles(){
 
 	if(settings.exists("Fonts/ofxFontStash2/styles")){
 
-		ofxJSON json = settings.getJson("Fonts/ofxFontStash2/styles");
+		ofJson json = settings.getJson("Fonts/ofxFontStash2/styles");
 
-		if(json.isObject()){
+		if(json.is_object()){
 
 			for( auto itr = json.begin(); itr != json.end(); itr++ ) { //walk all user styles
 
-				std::string styleName = itr.key().asString();
-				ofxJSON styleObj = (*itr);
+				std::string styleName = itr.key();
+				ofJson styleObj = (*itr);
 				ofxFontStash2::Style style;
 				bool ok = true;
 
-				if(!styleObj["fontID"].isNull()){
-					style.fontID = styleObj["fontID"].asString();
+				if(styleObj.contains("fontID")){
+					style.fontID = styleObj["fontID"];
 				}else{
 					ofLogError("ofxAppFonts") << " style '" << styleName << "' is missing a \"fontID\"! Ignoring that style!"; ok = false;
 				}
 
-				if(!styleObj["fontSize"].isNull()){
-					style.fontSize = styleObj["fontSize"].asFloat();
+				if(styleObj.contains("fontSize")){
+					style.fontSize = styleObj["fontSize"];
 				}else{
 					ofLogError("ofxAppFonts") << " style '" << styleName << "' is missing a \"fontSize\"! Ignoring that style!"; ok = false;
 				}
 
-				if(!styleObj["color"].isNull()) style.color = ofxFontStash2::Parser::colorFromHex(styleObj["color"].asString());
-				if(!styleObj["blur"].isNull()) style.blur = styleObj["blur"].asFloat();
-				if(!styleObj["lineHeightMult"].isNull()) style.lineHeightMult = styleObj["lineHeightMult"].asFloat();
-				if(!styleObj["alignV"].isNull()) style.alignmentV = getAlignmentFromString(styleObj["alignV"].asString());
+				if(styleObj.contains("color")) style.color = ofxFontStash2::Parser::colorFromHex(styleObj["color"]);
+				if(styleObj.contains("blur")) style.blur = styleObj["blur"];
+				if(styleObj.contains("lineHeightMult")) style.lineHeightMult = styleObj["lineHeightMult"];
+				if(styleObj.contains("alignV")) style.alignmentV = getAlignmentFromString(styleObj["alignV"]);
 
 				if(ok){
 					fonts2.addStyle(styleName, style);

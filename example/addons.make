@@ -7,7 +7,6 @@ ofxXmlSettings
 ofxFontStash
 ofxFontStash2
 ofxTuio
-ofxJSON
 ofxSuperLog
 ofxAutoTexture
 ofxApp

@@ -48,7 +48,7 @@ namespace ofxApp{
 
 	struct CatalogAssetsData{ //data sent to the user for him/her to report object assets
 		ContentObject * object;
-		ofxJSONElement * userData;
+		ofJson * userData;
 		std::string assetsLocation;
 		ofxAssets::DownloadPolicy assetDownloadPolicy;
 		ofxAssets::UsagePolicy assetUsagePolicy;
@@ -60,7 +60,7 @@ namespace ofxApp{
 		std::function<void (ofxMtJsonParserThread::SingleObjectParseData &)> parseOneObject;
 		std::function<void (ofxApp::CatalogAssetsData &)> defineObjectAssets = [](ofxApp::CatalogAssetsData &){;};
 		std::function<void (ContentObject*)> setupTexturedObject = [](ContentObject*){;};
-		ofxJSON userData;
+		ofJson userData;
 	};
 
 	struct ErrorReportData{

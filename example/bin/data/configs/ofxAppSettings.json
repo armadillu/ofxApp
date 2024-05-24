@@ -6,7 +6,7 @@
 		"numAASamples" : 8,
 		"showMouse" : true,
 		"enableMouse" : true,
-		"maxThreads" : 6,
+		"maxThreads" : 8,
 		"window":{
 			"windowMode" : 8, //see ofxScreenSetup::ScreenMode; windowed=8, fullOneMonitor=1, fullAllMonitors=0
 			"customWidth": 1024, //540
@@ -163,7 +163,7 @@
 	},
 	
 	"TextureLoader": {
-		"maxNumberSimulataneousLoads" : 6,
+		"maxNumberSimulataneousLoads" : 1,
 		"textureLodBias" : -0.3,
 		"maxTimeSpentLoadingPerFrameMs" : 4.0,//ms
 		"scanlinesPerLoop" : 128,
@@ -207,7 +207,7 @@
 	},
 
 	"GoogleAnalytics" : {
-		"enabled" : true,
+		"enabled" : false,
 		"verbose" : true,
 		"sendBenchmark" : true,
 		"randomizedUUID" : true, //this might fake N different users, instead of same user each session
@@ -224,7 +224,7 @@
 
 	"TUIO":{
 		"enabled" : true,
-		"port" : 3333
+		"port" : 3014
 	},
 
 	"Downloads":{ //settings for asset downloads
@@ -243,12 +243,12 @@
 			//"myHeaderName" : "myHeaderContent",
 		},
 		"verbose" : false,
-		"maxConcurrentDownloads": 20,
+		"maxConcurrentDownloads": 12,
 		"userAgent" : "", //not implemented
 		"timeOutSec" : 20,
 		"speedLimitKb" : 0, //per download - 0 means no limit
-		"idleTimeAfterEachDownloadSec" : 0.0,
-		"copyBufferSize" : 32, //Kb
+		"idleTimeAfterEachDownloadSec" : 0.1,
+		"copyBufferSize" : 16, //Kb
 		"maxNumRetries": 5 //if a file download fails, how many times to retry b4 giving up
 	},
 
@@ -279,7 +279,7 @@
 				"skipChecksumTests" : false, //if true, ofxApp will not check local asset status, leading to a faster boot, but potentially incorrect state. Never use in production
 				"removeUnusedAssets" : true, //if false, ofxApp will not do cleanup and keep assets in disk even if they disappear from the content JSON (for this countent source)
 				"liveUpdates" : { //if enabled, ofxApp will hit that endPoint every "interval seconds" and call ofxAppContentUpdate() on the delegate
-					"enabled" : true,
+					"enabled" : false,
 					"interval" : 60.0, //seconds
 					"maxThreads" : 1, //override standard # of threads for live updates, to not drop performance too much while the app is running
 					"maxConcurrentDownloads" : 1 //same as above for bandwidth
@@ -316,10 +316,10 @@
 		},  
 
   		"AssetDownloadPolicy":{ //asset should be downloaded if...
-  			"fileMissing" : true,
-  			"fileTooSmall" : true,
-  			"fileExistsAndNoChecksumProvided" : true,
-  			"fileExistsAndProvidedChecksumMissmatch" : true,
+  			"fileMissing" : false,
+  			"fileTooSmall" : false,
+  			"fileExistsAndNoChecksumProvided" : false,
+  			"fileExistsAndProvidedChecksumMissmatch" : false,
   			"fileExistsAndProvidedChecksumMatch" : false //no need to re-download if file is on disk and Checksums match
   		},
 

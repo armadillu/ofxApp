@@ -20,10 +20,10 @@ ofxAppParsers::ofxAppParsers(){
 	// Locate Object List in JSON user lambda //////////////////////////////////////////////////////////////////
 
 	cwru.pointToObjects = [](ofxMtJsonParserThread::JsonStructureData & inOutData){
-		ofxJSONElement & jsonRef = *(inOutData.fullJson);
+		ofJson & jsonRef = *(inOutData.fullJson);
 
-		if(jsonRef["data"].isObject()){
-			inOutData.objectArray = (ofxJSONElement*) &(jsonRef["data"]);
+		if(jsonRef["data"].is_object()){
+			inOutData.objectArray = (ofJson*) &(jsonRef["data"]);
 		}else{
 			ofLogError("ofApp") << "JSON has unexpected format!";
 			//if the json is not what we exepcted it to be,
@@ -39,14 +39,14 @@ ofxAppParsers::ofxAppParsers(){
 	cwru.parseOneObject = [](ofxMtJsonParserThread::SingleObjectParseData & inOutData){
 
 		//pointers mess up the json syntax somehow
-		const ofxJSONElement & jsonRef = *(inOutData.jsonObj);
+		const ofJson & jsonRef = *(inOutData.jsonObj);
 		string title, description, imgURL, imgSha1;
 
 		try{ //do some parsing - catching exceptions
-			title = jsonRef["title"].asString();
-			description = jsonRef["description"].asString();
-			imgURL = jsonRef["image"]["uri"].asString();
-			imgSha1 = jsonRef["image"]["chksum"].asString();
+			title = jsonRef["title"];
+			description = jsonRef["description"];
+			imgURL = jsonRef["image"]["uri"];
+			imgSha1 = jsonRef["image"]["chksum"];
 		}catch(exception exc){
 			inOutData.printMutex->lock();
 			ofLogError("ofApp") << exc.what() << " WHILE PARSING OBJ " << inOutData.objectID;
@@ -126,9 +126,9 @@ ofxAppParsers::ofxAppParsers(){
 	// Locate Object List in JSON user lambda //////////////////////////////////////////////////////
 
 	ch.pointToObjects = [](ofxMtJsonParserThread::JsonStructureData & inOutData){
-		ofxJSONElement & jsonRef = *(inOutData.fullJson);
-		if(jsonRef.isArray()){
-			inOutData.objectArray = (ofxJSONElement*) &(jsonRef);
+		ofJson & jsonRef = *(inOutData.fullJson);
+		if(jsonRef.is_array()){
+			inOutData.objectArray = (ofJson*) &(jsonRef);
 		}else{
 			ofLogError("ofApp") << "JSON has unexpected format!";
 			inOutData.objectArray = NULL;
@@ -141,7 +141,7 @@ ofxAppParsers::ofxAppParsers(){
 
 	ch.parseOneObject = [](ofxMtJsonParserThread::SingleObjectParseData & inOutData){
 
-		const ofxJSONElement & jsonRef = *(inOutData.jsonObj); //pointers mess up the json syntax somehow
+		const ofJson & jsonRef = *(inOutData.jsonObj); //pointers mess up the json syntax somehow
 
 		CH_Object * o = new CH_Object();
 
@@ -153,21 +153,21 @@ ofxAppParsers::ofxAppParsers(){
 
 			inOutData.objectID = o->objectID; //notice how we feed back the objectID to the parser!
 
-			Json::Value & jsonImagesArray = (Json::Value &)jsonRef["images"];
+			const ofJson & jsonImagesArray = jsonRef["images"];
 
 			for( auto itr = jsonImagesArray.begin(); itr != jsonImagesArray.end(); itr++ ) {
 
-				Json::Value & jsonImage = (Json::Value &)*itr;
+				const ofJson & jsonImage = *itr;
 
 				const string imgSize = "z"; //"x", "z", "b", "k" and so on
 
-				if(jsonImage[imgSize].isObject()){
+				if(jsonImage.contains(imgSize) ){
 					CH_Object::CH_Image img;
-					img.url = jsonImage[imgSize]["url"].asString();
-					img.sha1 = jsonImage[imgSize]["fingerprint"].asString();
-					img.imgSize.x = jsonImage[imgSize]["width"].asInt();
-					img.imgSize.y = jsonImage[imgSize]["height"].asInt();
-					img.isPrimary = (jsonImage[imgSize]["is_primary"].asString() == "1");
+					img.url = jsonImage[imgSize]["url"];
+					img.sha1 = jsonImage[imgSize]["fingerprint"];
+					img.imgSize.x = jsonImage[imgSize]["width"];
+					img.imgSize.y = jsonImage[imgSize]["height"];
+					img.isPrimary = (jsonImage[imgSize]["is_primary"] == "1");
 
 					o->images.push_back(img);
 				}

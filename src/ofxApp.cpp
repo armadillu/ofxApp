@@ -159,12 +159,12 @@ void App::setupContentData() {
 
 	//parse variables for JSON content sources
 	if(settingExists("Content/JsonSourcesVariables")){
-		ofxJSON vars = settings().getJson("Content/JsonSourcesVariables");
+		ofJson vars = settings().getJson("Content/JsonSourcesVariables");
 		if(vars.size()){
 			ofLogNotice("ofxApp") << "#### Json Sources Variables ###################################################";
 			for( auto itr = vars.begin(); itr != vars.end(); itr++){
-				const std::string & varName = itr.key().asString();
-				const std::string & varValue = (*itr).asString();
+				const std::string & varName = itr.key();
+				const std::string & varValue = (*itr);
 				contentSourceVariables[varName] = varValue;
 				ofLogNotice("ofxApp") << "   \"" << varName << "\" = \"" << varValue << "\"";
 			}
@@ -234,11 +234,10 @@ void App::setupErrorReporting(){
 	vector<std::string> emails;
 	
 	if(settings().exists("ErrorReporting/emails")){ //see if its a list of emails
-		ofxJSON emailsJson = settings().getJson("ErrorReporting/emails");
-		if(emailsJson.isArray()){
-			for( Json::ValueIterator itr = emailsJson.begin() ; itr != emailsJson.end() ; itr++ ) {
-				std::string email = (*itr).asString();
-				emails.push_back(email);
+		ofJson emailsJson = settings().getJson("ErrorReporting/emails");
+		if(emailsJson.is_array()){
+			for( auto itr = emailsJson.begin(); itr != emailsJson.end() ; itr++ ) {
+				emails.push_back(*itr);
 			}
 		}
 	}else{ //otherwise its a single email
@@ -549,11 +548,11 @@ void App::setupApp(){
 void App::setupLogLevelModuleOverrides(bool dynamicLoad){
 
 	if(settingExists("Logging/logLevelOverrides")){
-		ofxJSON logModuleLevels = settings().getJson("Logging/logLevelOverrides");
+		ofJson logModuleLevels = settings().getJson("Logging/logLevelOverrides");
 		if(logModuleLevels.size()){
 			for(auto itr = logModuleLevels.begin(); itr != logModuleLevels.end(); itr++){
-				std::string moduleName = itr.key().asString();
-				ofLogLevel logLevel = ofLogLevel((*itr).asInt());
+				std::string moduleName = itr.key();
+				ofLogLevel logLevel = ofLogLevel((int)(*itr));
 				ofSetLogLevel(moduleName, logLevel);
 				std::string msg = "Setting ofLogLevel( " + ofxApp::utils::toString(logLevel) + " ) for module \"" + moduleName + "\"";
 				ofLogNotice("ofxApp") << msg;
@@ -681,10 +680,10 @@ void App::loadModulesSettings(){
 	assetUsagePolicy.fileExistsAndProvidedChecksumMissmatch = getBool("Content/AssetUsagePolicy/fileExistsAndProvidedChecksumMissmatch");
 	assetUsagePolicy.fileExistsAndProvidedChecksumMatch = getBool("Content/AssetUsagePolicy/fileExistsAndProvidedChecksumMatch");
 
-	objectUsagePolicy.allObjectAssetsAreOK = getBool("Content/ObjectUsagePolicy/allAssetsAreOK");
-	objectUsagePolicy.minNumberOfImageAssets = getBool("Content/ObjectUsagePolicy/minNumberImgAssets");
-	objectUsagePolicy.minNumberOfVideoAssets = getBool("Content/ObjectUsagePolicy/minNumberVideoAssets");
-	objectUsagePolicy.minNumberOfAudioAssets = getBool("Content/ObjectUsagePolicy/minNumberAudioAssets");
+	objectUsagePolicy.allObjectAssetsAreOK = getInt("Content/ObjectUsagePolicy/allAssetsAreOK");
+	objectUsagePolicy.minNumberOfImageAssets = getInt("Content/ObjectUsagePolicy/minNumberImgAssets");
+	objectUsagePolicy.minNumberOfVideoAssets = getInt("Content/ObjectUsagePolicy/minNumberVideoAssets");
+	objectUsagePolicy.minNumberOfAudioAssets = getInt("Content/ObjectUsagePolicy/minNumberAudioAssets");
 
 	renderSize.x = getInt("App/renderSize/width");
 	renderSize.y = getInt("App/renderSize/height");
@@ -695,11 +694,11 @@ void App::loadModulesSettings(){
 void App::setupRuiWatches(){
 
 	RUI_GET_INSTANCE()->removeAllParamWatches();
-	ofxJSON paramWatches = settings().getJson("RemoteUI/paramWatches");
+	ofJson paramWatches = settings().getJson("RemoteUI/paramWatches");
 	if(paramWatches.size()){
 		for( auto itr = paramWatches.begin(); itr!=paramWatches.end() ; itr++){
-			std::string paramName = itr.key().asString();
-			bool shouldWatch = (*itr).asBool();
+			std::string paramName = itr.key();
+			bool shouldWatch = (*itr);
 			if (shouldWatch){
 				ofLogNotice("ofxApp") << "Adding RemoteUI Param Watch for '" << paramName << "'";
 				RUI_WATCH_PARAM_WCN(paramName);
@@ -1338,12 +1337,10 @@ void App::onSetState(ofxStateMachine<State>::StateChangedEventArgs& change){
 
 						//get custom headers setup
 						if(settingExists("Content/JsonSources/" + currentContentID + "/httpConfig/customHttpHeaders")){
-							ofxJSON customHeaders = settings().getJson("Content/JsonSources/" + currentContentID + "/httpConfig/customHttpHeaders");
-							if(customHeaders.isObject()){
-								for( Json::Value::const_iterator itr = customHeaders.begin() ; itr != customHeaders.end() ; itr++ ) {
-									std::string header = itr.key().asString();
-									std::string value = (*itr).asString();
-									contentHttpConfigs[currentContentID].customHeaders[header] = value;
+							ofJson customHeaders = settings().getJson("Content/JsonSources/" + currentContentID + "/httpConfig/customHttpHeaders");
+							if(customHeaders.is_object()){
+								for( auto itr = customHeaders.begin() ; itr != customHeaders.end() ; itr++ ) {
+									contentHttpConfigs[currentContentID].customHeaders[itr.key()] = *itr;
 								}
 							}
 						}
