@@ -8,7 +8,7 @@ void ofApp::setup(){
 
 	map<string, ofxApp::ParseFunctions> objectParsers;
 	//put them in a map - named as the "ofxAppSettings.json" section ("Content/JsonSources")
-	objectParsers["CWRU"] = myParsers.cwru;
+	//objectParsers["CWRU"] = myParsers.cwru;
 	objectParsers["CH"] = myParsers.ch;
 
 	//start the ofxApp setup process
@@ -217,24 +217,25 @@ void ofApp::setupScrollViews(){
 
 	//scrollview config
 	TexturedObjectScrollView::ScrollViewConfig config;
-	config.numRows = 3;
-	config.drawLoadingRects = true;
+	config.numRows = 2;
+	config.drawLoadingRects = false;
+	config.loadingRectColors = ofColor(0,0,0);
 	config.customTileDraw = true; //calls onDrawTile() for each on-sreen tile
-	config.imgFadeInDuration = 0.1;
+	config.imgFadeInDuration = 0.2;
 	config.padding = padding;
 	config.sizeToLoad = TEXTURE_ORIGINAL;
 	config.mipmaps = true;
 	config.maxScrollHandleW = 200;
 	config.scrollFriction = 0.99;
-	config.snapToImage = false;
+	config.snapToImage = true;
 	config.marginPadding = padding;
 	config.bgColor = ofColor(22);
 	config.scrollHandleColor = ofColor(128);
 	config.scrollHandleVertPostion = 4;
 	config.scrollviewEdgeGradientWidth = 30;
 	config.numFboSamples = 4;
-	config.canvasLookAheadDist = ofGetWidth() ; // load offscreen images that are 200 far from screen
-	config.unloadDelay = 5.0; //only unload images once they have been N seconds offscreen
+	config.canvasLookAheadDist = ofGetWidth() / 2 ; // load offscreen images that are 200 far from screen
+	config.unloadDelay = 0.0; //only unload images once they have been N seconds offscreen
 
 	scrollView = new TexturedObjectScrollView();
 	scrollView->setName("scrollView");
@@ -312,7 +313,7 @@ void ofApp::onDrawTile(TexturedObjectScrollView::DrawTileInfo & d){
 	TexturedObject * to = d.objTex.texObj;
 	ContentObject * co = dynamic_cast<ContentObject*>(d.objTex.texObj);
 
-	ofSetColor(0,0,0, 200);
+	ofSetColor(0,0,0, 255);
 	int h = 20;
 	ofDrawRectangle(d.area.x, d.area.y + d.area.height - h, d.area.width, h);
 	ofSetColor(255);

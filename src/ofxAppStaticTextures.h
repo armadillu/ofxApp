@@ -129,7 +129,7 @@ protected:
 	vector<PreLoadData> loaded;
 	
 	vector<std::string> texNameOrder;
-	unordered_map<std::string, ofxAutoTexture*> textures;
+	std::unordered_map<std::string, ofxAutoTexture*> textures;
 	
 	ofxAutoTexture* createTexObjForPath(std::string filePath, std::string & texName, bool & createMipMap, bool & useTex2D);
 

@@ -55,23 +55,13 @@ void ofxAppStaticTextures::loadTexturesInDir(const std::string& imgDirPath, int 
 		ofStringReplace(dirPath, "\\", "/");
 		#endif
 
-		ofDirectory dir(imgDirPath);
-		dir.allowExt("png");
-		dir.allowExt("psd");
-		dir.allowExt("jpeg");
-		dir.allowExt("jpg");
-		dir.allowExt("tif");
-		dir.allowExt("tiff");
-		dir.allowExt("gif");
-		dir.allowExt("tga");
-		dir.listDir();
-		if (dir.size() == 0) { //if no images, proceed now.
+		loadTexturesInDirectory(imgDirPath, true);
+
+		if (pendingToPreLoad.size() == 0) { //if no images, proceed now.
 			ofNotifyEvent(eventAllTexturesLoaded, this);
 			ofLogWarning("ofxAppStaticTextures") << "No textures found in the directory! \"" << imgDirPath << "\"";
 			return;
 		}
-
-		loadTexturesInDirectory(imgDirPath, true);
 	}else{
 		ofLogError("ofxAppStaticTextures") << "Already loading async!";
 	}
@@ -93,7 +83,7 @@ void ofxAppStaticTextures::loadTexturesInDirectory(const std::string& path, bool
 
 		if (file.isDirectory() && recursive) {
 			loadTexturesInDirectory(path + "/" + file.getFileName(), recursive);
-			continue;
+			continue; //this item is a dir, so don't try and load it
 		}
 		std::string ext = ofToLower(file.getExtension());
 		if (ext == "png" || ext == "jpg" || ext == "jpeg" || ext == "gif" || ext == "tga" || ext == "tiff" || ext == "tif" || ext == "psd") {

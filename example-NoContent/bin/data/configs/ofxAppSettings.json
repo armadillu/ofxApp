@@ -204,7 +204,7 @@
 	},
 	
 	"GoogleAnalytics" : {
-		"enabled" : true,
+		"enabled" : false,
 		"verbose" : true,
 		"sendBenchmark" : true,
 		"randomizedUUID" : true, //this might fake N different users, instead of same user each session

@@ -435,8 +435,8 @@ void TexturedObjectScrollView::objectTextureDidLoad(TexturedObject::TextureEvent
 
 			int layoutIndex = it->second;
 			TexturedObject * to = layout[layoutIndex].texObjTex.texObj;
-			//layout[layoutIndex].fade.animateTo(1);
-			layout[layoutIndex].fade.reset(1);
+			layout[layoutIndex].fade.animateTo(1);
+			//layout[layoutIndex].fade.reset(1);
 			loadingTextures.erase(it);
 
 			if(listenerCounter[to] == 1){
