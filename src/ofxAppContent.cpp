@@ -61,6 +61,12 @@ void ofxAppContent::setup(	const std::string &  ID,
 	}
 
 	//config the http downloader if you need to (proxy, etc)
+	// Optional setting: existing applications keep connection reuse disabled.
+	const std::string reuseKey = "Downloads/reuseConnections";
+	const bool reuseConnections = ofxApp::get().settingExists(reuseKey) &&
+		ofxApp::get().getBool(reuseKey, false);
+	dlc.setConnectionReuse(reuseConnections);
+	if(reuseConnections) ofLogNotice("ofxAppContent-" + ID) << "Asset download connection reuse enabled";
 	dlc.setMaxConcurrentDownloads(numConcurrentDownloads);
 	dlc.setSpeedLimit(speedLimitKBs);
 	dlc.setCopyBufferSize(copyBufferSizeKb);

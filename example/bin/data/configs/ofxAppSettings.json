@@ -167,6 +167,7 @@
 		"textureLodBias" : -0.3,
 		"maxTimeSpentLoadingPerFrameMs" : 4.0,//ms
 		"scanlinesPerLoop" : 128,
+		"bytesPerLoop" : 262144, //optional byte-sized uploads; omit or set to 0 for scanline batches
 		"maxLoadRequestsPerFrame" : 64,
 		"defaultUnloadDelay": 0
 	},
@@ -244,11 +245,12 @@
 		},
 		"verbose" : false,
 		"maxConcurrentDownloads": 12,
+		"reuseConnections": true, //opt-in ofxSimpleHttp persistent HTTP(S) sessions
 		"userAgent" : "", //not implemented
 		"timeOutSec" : 20,
 		"speedLimitKb" : 0, //per download - 0 means no limit
 		"idleTimeAfterEachDownloadSec" : 0.1,
-		"copyBufferSize" : 16, //Kb
+		"copyBufferSize" : 64, //Kb
 		"maxNumRetries": 5 //if a file download fails, how many times to retry b4 giving up
 	},
 

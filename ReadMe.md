@@ -1060,7 +1060,17 @@ Find more about how to use [ofxRemoteUI](http://github.com/armadillu/ofxRemoteUI
 
 ### 2.7 Dynamic Texture Loading
 
-TODO! - see [ofxTexturedObject](https://github.com/armadillu/ofxTexturedObject).
+Dynamic image uploads use [ofxTexturedObject](https://github.com/armadillu/ofxTexturedObject)
+and `ofxProgressiveTextureLoad`. `TextureLoader/maxTimeSpentLoadingPerFrameMs`
+sets the shared upload budget per frame. It is a soft limit: an individual driver
+call can stall past the deadline.
+
+By default, `TextureLoader/scanlinesPerLoop` controls the number of rows uploaded
+per call. Optionally set `TextureLoader/bytesPerLoop` to a positive byte count to
+use full-width strips sized by bytes instead. For example, `262144` targets
+256 KiB per call, allowing skinny images to upload more rows at once. At least
+one row is uploaded per strip. Omitting the setting or setting it to zero keeps
+scanline batching. The main example enables this optional setting.
 
 ---
 

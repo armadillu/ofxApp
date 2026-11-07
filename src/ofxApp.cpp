@@ -430,6 +430,15 @@ void App::setupTextureLoader(){
 	q->setTexLodBias( mipmapBias ); //MipMap sharpness
 	q->setTargetTimePerFrame( maxMsPerFrame );	//spend at most 'x' milis loading textures per frame
 	q->setScanlinesPerLoop( scanLinesPerLoop );
+	// Optional byte-sized batches; existing settings keep their scanline behavior.
+	const std::string bytesKey = "TextureLoader/bytesPerLoop";
+	if(settingExists(bytesKey)){
+		const int bytesPerLoop = getInt(bytesKey);
+		if(bytesPerLoop > 0){
+			q->setBytesPerLoop(static_cast<size_t>(bytesPerLoop));
+			ofLogNotice("ofxApp") << "Texture upload byte-sized batches enabled: " << bytesPerLoop << " bytes per loop";
+		}
+	}
 	q->setMaximumRequestsPerFrame( maxReq );
 	TexturedObjectConfig::one().setDefaultTextureUnloadDelay(defaultUnloadDelay);
 }
