@@ -316,7 +316,7 @@
 		},  
 
   		"AssetDownloadPolicy":{ //asset should be downloaded if...
-  			"fileMissing" : false,
+  			"fileMissing" : true,
   			"fileTooSmall" : false,
   			"fileExistsAndNoChecksumProvided" : false,
   			"fileExistsAndProvidedChecksumMissmatch" : false,
