@@ -163,7 +163,7 @@
 	},
 	
 	"TextureLoader": {
-		"maxNumberSimulataneousLoads" : 1,
+		"maxNumberSimulataneousLoads" : 5,
 		"textureLodBias" : -0.3,
 		"maxTimeSpentLoadingPerFrameMs" : 4.0,//ms
 		"scanlinesPerLoop" : 128,
