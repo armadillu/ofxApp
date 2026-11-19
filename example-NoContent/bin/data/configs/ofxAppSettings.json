@@ -163,7 +163,7 @@
 		"maxNumberSimulataneousLoads" : 3,
 		"textureLodBias" : -0.3,
 		"maxTimeSpentLoadingPerFrameMs" : 4.0,//ms
-		"scanlinesPerLoop" : 128,
+		"bytesPerLoop" : 262144,
 		"maxLoadRequestsPerFrame" : 64,
 		"defaultUnloadDelay" : 10.0 //seconds
 	},

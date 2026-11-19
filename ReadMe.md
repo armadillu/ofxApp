@@ -1065,12 +1065,9 @@ and `ofxProgressiveTextureLoad`. `TextureLoader/maxTimeSpentLoadingPerFrameMs`
 sets the shared upload budget per frame. It is a soft limit: an individual driver
 call can stall past the deadline.
 
-By default, `TextureLoader/scanlinesPerLoop` controls the number of rows uploaded
-per call. Optionally set `TextureLoader/bytesPerLoop` to a positive byte count to
-use full-width strips sized by bytes instead. For example, `262144` targets
-256 KiB per call, allowing skinny images to upload more rows at once. At least
-one row is uploaded per strip. Omitting the setting or setting it to zero keeps
-scanline batching. The main example enables this optional setting.
+`TextureLoader/bytesPerLoop` sets the target bytes per upload call. Uploads use
+full-width strips with at least one row per call. If the setting is omitted or
+nonpositive, the queue uses its default target of 256 KiB (`262144` bytes).
 
 ---
 

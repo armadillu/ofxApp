@@ -166,8 +166,7 @@
 		"maxNumberSimulataneousLoads" : 5,
 		"textureLodBias" : -0.3,
 		"maxTimeSpentLoadingPerFrameMs" : 4.0,//ms
-		"scanlinesPerLoop" : 128,
-		"bytesPerLoop" : 262144, //optional byte-sized uploads; omit or set to 0 for scanline batches
+		"bytesPerLoop" : 262144, //target bytes per upload call
 		"maxLoadRequestsPerFrame" : 64,
 		"defaultUnloadDelay": 0
 	},

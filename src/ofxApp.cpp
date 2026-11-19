@@ -420,23 +420,20 @@ void App::setupTextureLoader(){
 	int maxThreads = getInt("TextureLoader/maxNumberSimulataneousLoads");
 	float mipmapBias = getFloat("TextureLoader/textureLodBias");
 	float maxMsPerFrame = getFloat("TextureLoader/maxTimeSpentLoadingPerFrameMs");
-	int scanLinesPerLoop = getInt("TextureLoader/scanlinesPerLoop");
 	int maxReq = getInt("TextureLoader/maxLoadRequestsPerFrame");
 	float defaultUnloadDelay = getFloat("TextureLoader/defaultUnloadDelay");
 	ofLogNotice("ofxApp") << "setupTextureLoader() [maxThreads:" << maxThreads << " maxMsPerFrame:" << maxMsPerFrame <<
-	" nScanLinesPerLoop:" << scanLinesPerLoop << " mipmapBias:" << mipmapBias << " maxReqPerFrame:" << maxReq << " defaultUnloadDelay:" << defaultUnloadDelay << "]";
+	" mipmapBias:" << mipmapBias << " maxReqPerFrame:" << maxReq << " defaultUnloadDelay:" << defaultUnloadDelay << "]";
 	ProgressiveTextureLoadQueue * q = ProgressiveTextureLoadQueue::instance();
 	q->setMaxThreads( maxThreads ); //N threads loading images in the bg
 	q->setTexLodBias( mipmapBias ); //MipMap sharpness
 	q->setTargetTimePerFrame( maxMsPerFrame );	//spend at most 'x' milis loading textures per frame
-	q->setScanlinesPerLoop( scanLinesPerLoop );
-	// Optional byte-sized batches; existing settings keep their scanline behavior.
 	const std::string bytesKey = "TextureLoader/bytesPerLoop";
 	if(settingExists(bytesKey)){
 		const int bytesPerLoop = getInt(bytesKey);
 		if(bytesPerLoop > 0){
 			q->setBytesPerLoop(static_cast<size_t>(bytesPerLoop));
-			ofLogNotice("ofxApp") << "Texture upload byte-sized batches enabled: " << bytesPerLoop << " bytes per loop";
+			ofLogNotice("ofxApp") << "Texture upload target: " << bytesPerLoop << " bytes per call";
 		}
 	}
 	q->setMaximumRequestsPerFrame( maxReq );
