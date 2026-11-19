@@ -189,6 +189,7 @@ protected:
 	void setupTuio();
 	void setupApp();
 	void setupTextureLoader();
+	void setupTextureLoaderRemoteUI();
 	void setupGlobalParameters();
 	void setupRuiWatches();
 	void startLoadingStaticAssets();

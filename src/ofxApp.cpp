@@ -11,12 +11,15 @@
 #include "TexturedObjectStats.h"
 #include "ofxAppUtils.h"
 #include "TexturedObjectConfig.h"
+#include "ProgressiveTextureLoadQueue.h"
 #include "ofxGoogleAnalytics.h"
 #include "ofxMullion.h"
 #include "ofxAutoTexture.h"
 #include "ofxAppErrorReporter.h"
 #include "GLFW/glfw3.h"
 #include "ofxTuio.h"
+#include <cmath>
+#include <limits>
 
 //global var pointing to ofxApp::App so you can reach it from the debugger
 ofxApp::App * global_ofxApp = nullptr;
@@ -103,6 +106,7 @@ void App::setup(	const map<std::string, ofxApp::ParseFunctions> & cfgs,
 		if(timeSampleOfxApp) TS_START_NIF("ofxApp Setup");
 		setupTimeMeasurements();
 		setupTextureLoader();
+		setupTextureLoaderRemoteUI();
 		setupWindow();
 		setupOF();
 		ofxSimpleHttp::createSslContext();
@@ -441,6 +445,53 @@ void App::setupTextureLoader(){
 }
 
 
+void App::setupTextureLoaderRemoteUI(){
+	auto * queue = ProgressiveTextureLoadQueue::instance();
+	auto * rui = RUI_GET_INSTANCE();
+	RUI_NEW_GROUP("Progressive Texture Loader");
+
+	rui->shareParam("Texture loader threads",
+					[queue]{ return queue->getMaxThreads(); },
+					[queue](int threads){ queue->setMaxThreads(threads); },
+					1, std::max(64, queue->getMaxThreads()));
+
+	rui->shareParam("Texture requests per frame",
+					[queue]{ return queue->getMaximumRequestsPerFrame(); },
+					[queue](int requests){ queue->setMaximumRequestsPerFrame(std::max(0, requests)); },
+					0, std::max(128, queue->getMaximumRequestsPerFrame()));
+	rui->setDescriptionForLastAddedParam("Maximum new requests dispatched each frame. Zero pauses dispatch.");
+
+	const float maxBudgetMs = std::max(33.3f, queue->getTargetTimePerFrame());
+	rui->shareParam("Texture upload budget (ms)",
+					[queue]{ return queue->getTargetTimePerFrame(); },
+					[queue, maxBudgetMs](float ms){
+						if(std::isfinite(ms)) queue->setTargetTimePerFrame(std::min(ms, maxBudgetMs));
+					},
+					0.01f, maxBudgetMs);
+
+	// RemoteUI integers are signed 32-bit values.
+	auto getUploadBytes = [queue]{
+		return static_cast<int>(std::min(queue->getBytesPerLoop(), static_cast<size_t>(std::numeric_limits<int>::max())));
+	};
+	rui->shareParam("Texture upload strip (bytes)", getUploadBytes,
+					[queue](int bytes){ queue->setBytesPerLoop(static_cast<size_t>(std::max(1, bytes))); },
+					1, std::max(4 * 1024 * 1024, getUploadBytes()));
+	rui->setDescriptionForLastAddedParam("Target bytes per upload strip. Applies to pending and active loads.");
+
+	const float lodBiasRange = std::max(4.0f, std::abs(queue->getTexLodBias()));
+	rui->shareParam("Texture mipmap LOD bias",
+					[queue]{ return queue->getTexLodBias(); },
+					[queue](float bias){ if(std::isfinite(bias)) queue->setTexLodBias(bias); },
+					-lodBiasRange, lodBiasRange);
+	rui->setDescriptionForLastAddedParam("Applies to new requests. Negative values sharpen mipmaps.");
+
+	rui->shareParam("Texture loader verbose logging",
+					[queue]{ return queue->getVerbose(); },
+					[queue](bool verbose){ queue->setVerbose(verbose); });
+	rui->setDescriptionForLastAddedParam("Enables debug logging for new requests.");
+}
+
+
 void App::setupGlobalParameters(){
 	bool createExtraParams = false;
 	if(settingExists("App/createPrototypingRuiParams")){
@@ -477,6 +528,7 @@ void App::loadDynamicSettings() {
 	setupLogLevelModuleOverrides(true);
 	ofSetLogLevel(ofLogLevel(getInt("Logging/logLevel")));
 	setupRuiWatches();
+	RUI_PUSH_TO_CLIENT();
 }
 
 void App::setSettingsFilePath(const std::string & ofxAppSettingsJsonPath){
