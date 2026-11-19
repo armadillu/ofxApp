@@ -150,7 +150,7 @@ public:
 	ofRectangle 		getStartupScreenViewport(){return startupScreenViewport;} //loading screen rect area
 	ofVec2f			getRenderSize(){return renderSize;}
 	bool				isWindowSetup(){return windowIsSetup;}
-	bool 			isJsonContentDifferentFromLastLaunch(std::string contentID, std::string & freshJsonSha1, std::string & oldJsonChecksum);
+	bool 			isJsonContentDifferentFromLastLaunch(const std::string& contentID, std::string & freshJsonSha1, std::string & oldJsonChecksum);
 	bool				getIsUsingOfflineJson(){return usingOfflineJson;}
 
 
@@ -158,7 +158,7 @@ public:
 	bool 			forceLiveUpdate(const std::string & contentID);
 
 	//to draw debug msgs
-	ofRectangle		drawMsgInBox(std::string msg, int x, int y, int fontSize, ofColor fontColor, ofColor bgColor = ofColor::black, float edgeGrow = 5);
+	ofRectangle		drawMsgInBox(const std::string& msg, int x, int y, int fontSize, ofColor fontColor, ofColor bgColor = ofColor::black, float edgeGrow = 5);
 
 	void tuioAdded(ofxTuioCursor & tuioCursor);
 	void tuioRemoved(ofxTuioCursor & tuioCursor);

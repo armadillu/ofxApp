@@ -111,7 +111,7 @@ void ofxAppContent::setMaxConcurrentDownloads(int nDownloads){
 	dlc.setMaxConcurrentDownloads(nDownloads);
 }
 
-void ofxAppContent::setJsonDownloadURL(std::string newJsonURL, bool itsOfflineJson){
+void ofxAppContent::setJsonDownloadURL(const std::string& newJsonURL, bool itsOfflineJson){
 	if(itsOfflineJson){
 		useOfflineJson = true;
 		this->jsonURL_offline = newJsonURL;

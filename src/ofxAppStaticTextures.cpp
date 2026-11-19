@@ -7,6 +7,7 @@
 //
 
 #include "ofxAppStaticTextures.h"
+#include <utility>
 #include "ofxApp.h"
 #include "ofxAppErrorReporter.h"
 #include "ofxAutoTexture.h"
@@ -115,7 +116,7 @@ void ofxAppStaticTextures::setAnisotropy(float anisotropy){
 }
 
 
-ofxAutoTexture* ofxAppStaticTextures::loadTexture(PreLoadData data){
+ofxAutoTexture* ofxAppStaticTextures::loadTexture(const PreLoadData& data){
 	
 	//set OF ARB global state according to file naming
 	if (data.createMipmap) {
@@ -248,10 +249,10 @@ void ofxAppStaticTextures::onUpdate(ofEventArgs & ){
 		float t = ofGetElapsedTimef();
 		for(int i = pendingToPreLoad.size()-1; i >= 0; i--){
 			if(pendingToPreLoad[i].loader->preloaded){
-				PreLoadData currTex = pendingToPreLoad[i];
+				PreLoadData currTex = std::move(pendingToPreLoad[i]);
 				pendingToPreLoad.erase(pendingToPreLoad.begin() + i);
 				loadTexture(currTex);
-				loaded.push_back(currTex);
+				loaded.push_back(std::move(currTex));
 				if(pendingToPreLoad.size() == 0){
 					ofLogNotice("ofxAppStaticTextures") << "#### DONE loading " << textures.size() << " Static Textures! Memory used: " << ofToString(memUsed,2) << "Mb ############################################";
 					ofLogNotice("ofxAppStaticTextures") << "Loading StaticTextures took " << ofxApp::utils::secondsToHumanReadable(ofGetElapsedTimef() - startLoadTime, 2);

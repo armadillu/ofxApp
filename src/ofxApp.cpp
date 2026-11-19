@@ -1728,7 +1728,7 @@ ofRectangle App::getRenderRect() {
 }
 
 
-ofRectangle App::drawMsgInBox(std::string msg, int x, int y, int fontSize, ofColor fontColor, ofColor bgColor, float edgeGrow) {
+ofRectangle App::drawMsgInBox(const std::string& msg, int x, int y, int fontSize, ofColor fontColor, ofColor bgColor, float edgeGrow) {
 
 	ofRectangle bbox;
 	if(!ofIsGLProgrammableRenderer()){ //use ofxFontStash
@@ -1765,7 +1765,7 @@ string App::getUpdatedContentURL(const string & contentID){
 
 	//search and replace for user defined variables
 	string oldJsonURL = jsonURL;
-	for(auto it : contentSourceVariables){
+	for(const auto& it : contentSourceVariables){
 		string varName = "$" + it.first;
 		const string & varValue = it.second;
 		ofStringReplace(jsonURL, varName, varValue);
@@ -1780,16 +1780,17 @@ string App::getUpdatedContentURL(const string & contentID){
 }
 
 
-bool App::isJsonContentDifferentFromLastLaunch(std::string contentID, std::string & freshJsonSha1, std::string & oldJsonChecksum){
+bool App::isJsonContentDifferentFromLastLaunch(const std::string& contentID, std::string & freshJsonSha1, std::string & oldJsonChecksum){
 
-	if(contentStorage.find(contentID) == contentStorage.end()){
+	auto content = contentStorage.find(contentID);
+	if(content == contentStorage.end()){
 		ofLogError("ofxApp") << "cant find content matching this contentID \"" << contentID << "\"";
 		return false;
 	}
-	freshJsonSha1 = contentStorage[contentID]->getFreshJsonSha1();
-	oldJsonChecksum = contentStorage[contentID]->getoldJsonChecksum();
+	freshJsonSha1 = content->second->getFreshJsonSha1();
+	oldJsonChecksum = content->second->getoldJsonChecksum();
 
-	ofLogNotice("ofxApp") << "JSON sha1s for contentID: \"" << contentID << "\" freshJson: \"" << freshJsonSha1 << "\" oldJson: \"" << oldJsonChecksum << "\"";
+	ofLogNotice("ofxApp") << "JSON sha1s for contentID: \"" << content->first << "\" freshJson: \"" << freshJsonSha1 << "\" oldJson: \"" << oldJsonChecksum << "\"";
 	return freshJsonSha1 != oldJsonChecksum;
 }
 

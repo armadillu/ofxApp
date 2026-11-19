@@ -76,7 +76,7 @@ public:
 
 	void setShouldRemoveExpiredAssets(bool);
 
-	void setJsonDownloadURL(std::string jsonURL, bool itsOfflineJson);
+	void setJsonDownloadURL(const std::string& jsonURL, bool itsOfflineJson);
 	std::string getJsonDownloadURL(){ return jsonURL;};
 
 	void update(float dt);

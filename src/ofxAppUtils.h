@@ -38,7 +38,7 @@ namespace ofxApp{
 
 		bool loadTexture(ofTexture & tex, const std::string & path, bool mipmap, float bias, int anisotropy);
 
-		bool isValidEmail(const std::string email);
+		bool isValidEmail(const std::string& email);
 
 		void logBanner(const std::string & log); //to make prettier log headers
 		void logParagraph(const std::string & moduleName, ofLogLevel lev, const std::string & text);

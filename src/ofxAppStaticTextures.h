@@ -120,7 +120,7 @@ protected:
 	
 	void onUpdate(ofEventArgs & );
 
-	ofxAutoTexture* loadTexture(PreLoadData data);
+	ofxAutoTexture* loadTexture(const PreLoadData& data);
 	void loadTexturesInDirectory(const std::string& path, bool recursive);
 
 	std::string dirPath; //path to where the textures are

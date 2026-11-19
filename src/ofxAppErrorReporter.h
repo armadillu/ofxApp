@@ -25,13 +25,13 @@ public:
 	void setup(std::string host, int port, const vector<std::string>& emails, bool shouldReportErrors,
 		std::string hostName, std::string hostIP, std::string binaryName, bool attachGitStatus);
 	
-	void send(std::string alertName, std::string msg, int level02, std::string filePath = "");
-	void send(std::string alertName, std::string msg, int level02, vector<std::string> filePaths);
+	void send(const std::string& alertName, const std::string& msg, int level02, const std::string& filePath = "");
+	void send(const std::string& alertName, const std::string& msg, int level02, const vector<std::string>& filePaths);
 	
 	
 	
-	void sendBlocking(std::string alertName, std::string msg, int level02, std::string filePath = "");
-	void sendBlocking(std::string alertName, std::string msg, int level02, vector<std::string> filePaths);
+	void sendBlocking(const std::string& alertName, const std::string& msg, int level02, const std::string& filePath = "");
+	void sendBlocking(const std::string& alertName, const std::string& msg, int level02, const vector<std::string>& filePaths);
 	
 
 protected:

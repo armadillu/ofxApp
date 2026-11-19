@@ -43,18 +43,22 @@ void ofxAppErrorReporter::setup(std::string host, int port, const vector<std::st
 	}
 }
 	
-void ofxAppErrorReporter::send(std::string alertName, std::string msg, int level02, std::string filePath){
+void ofxAppErrorReporter::send(const std::string& alertName, const std::string& msg, int level02, const std::string& filePath){
 	if(enabled){
-		if(filePath == "") filePath = ofToDataPath(ofxSuperLog::getLogger()->getCurrentLogFile(), true);
+		std::string fallbackPath;
+		if(filePath.empty()){
+			fallbackPath = ofToDataPath(ofxSuperLog::getLogger()->getCurrentLogFile(), true);
+		}
+		const std::string& attachmentPath = filePath.empty() ? fallbackPath : filePath;
 		std::string msg2 = addContext(msg);
 		logSend(alertName, msg, level02, false);
-		sensu->send(alertName, msg2, ofxSensu::Status(level02), emails, filePath, false);
+		sensu->send(alertName, msg2, ofxSensu::Status(level02), emails, attachmentPath, false);
 	}else{
 		if(level02 != 0) ofLogNotice("ofxAppErrorReporter") << "Skipping Send Error Report \"" << alertName<< "\" : \"" << msg << "\" bc Err Reports are disabled";
 	}
 }
 
-void ofxAppErrorReporter::send(std::string alertName, std::string msg, int level02, vector<std::string> filePaths){
+void ofxAppErrorReporter::send(const std::string& alertName, const std::string& msg, int level02, const vector<std::string>& filePaths){
 	if(enabled){
 		logSend(alertName, msg, level02, false);
 		std::string msg2 = addContext(msg);
@@ -66,18 +70,22 @@ void ofxAppErrorReporter::send(std::string alertName, std::string msg, int level
 	
 	
 	
-void ofxAppErrorReporter::sendBlocking(std::string alertName, std::string msg, int level02, std::string filePath){
+void ofxAppErrorReporter::sendBlocking(const std::string& alertName, const std::string& msg, int level02, const std::string& filePath){
 	if(enabled){
-		if(filePath == "") filePath = ofToDataPath(ofxSuperLog::getLogger()->getCurrentLogFile(), true);
+		std::string fallbackPath;
+		if(filePath.empty()){
+			fallbackPath = ofToDataPath(ofxSuperLog::getLogger()->getCurrentLogFile(), true);
+		}
+		const std::string& attachmentPath = filePath.empty() ? fallbackPath : filePath;
 		logSend(alertName, msg, level02, true);
 		std::string msg2 = addContext(msg);
-		sensu->send(alertName, msg2, ofxSensu::Status(level02), emails, filePath, true);
+		sensu->send(alertName, msg2, ofxSensu::Status(level02), emails, attachmentPath, true);
 	}else{
 		if(level02 != 0) ofLogNotice("ofxAppErrorReporter") << "Skipping Send Error Report \"" << alertName<< "\" : \"" << msg << "\" bc Err Reports are disabled";
 	}
 }
 
-void ofxAppErrorReporter::sendBlocking(std::string alertName, std::string msg, int level02, vector<std::string> filePaths){
+void ofxAppErrorReporter::sendBlocking(const std::string& alertName, const std::string& msg, int level02, const vector<std::string>& filePaths){
 	if(enabled){
 		logSend(alertName, msg, level02, true);
 		std::string msg2 = addContext(msg);

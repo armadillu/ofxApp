@@ -133,7 +133,7 @@ void ofxAppFonts::loadFontStash2Fonts(){
 
 			ofLogNotice("ofxAppFonts") << ofxApp::utils::getAsciiHeader("ofxFontStash2 available fonts", '#', 4, 140);
 			auto ids = fonts2.getFontIDs();
-			for(auto id: ids){
+			for(const auto& id : ids){
 				ofLogNotice("ofxAppFonts") << "# \"" << id << "\"";
 			}
 		}else{
@@ -196,8 +196,8 @@ void ofxAppFonts::loadFontStash2Styles(){
 			}
 
 			ofLogNotice("ofxAppFonts") << ofxApp::utils::getAsciiHeader("ofxFontStash2 available Styles", '#', 4, 140);
-			auto styles = fonts2.getStyles();
-			for(auto st : styles){
+			const auto& styles = fonts2.getStyles();
+			for(const auto& st : styles){
 				ofLogNotice("ofxAppFonts") << "# \"" << st.first << "\": \"" << st.second.toString() << "\"";
 			}
 			ofLogNotice("ofxAppFonts") << string(140,'#');
