@@ -1433,6 +1433,32 @@ void App::onSetState(ofxStateMachine<State>::StateChangedEventArgs& change){
 						if(settingExists(policyPath)){
 							skipPolicyTests = getBool(policyPath);
 						}
+
+						// Each source inherits the global policies and can override individual fields.
+						auto sourceDownloadPolicy = assetDownloadPolicy;
+						auto sourceUsagePolicy = assetUsagePolicy;
+						auto sourceObjectPolicy = objectUsagePolicy;
+						const string sourcePath = "Content/JsonSources/" + currentContentID + "/";
+						auto overrideBool = [&](const string & key, bool & value){
+							if(settingExists(sourcePath + key)) value = getBool(sourcePath + key);
+						};
+						auto overrideInt = [&](const string & key, int & value){
+							if(settingExists(sourcePath + key)) value = getInt(sourcePath + key);
+						};
+						overrideBool("AssetDownloadPolicy/fileMissing", sourceDownloadPolicy.fileMissing);
+						overrideBool("AssetDownloadPolicy/fileTooSmall", sourceDownloadPolicy.fileTooSmall);
+						overrideBool("AssetDownloadPolicy/fileExistsAndNoChecksumProvided", sourceDownloadPolicy.fileExistsAndNoChecksumProvided);
+						overrideBool("AssetDownloadPolicy/fileExistsAndProvidedChecksumMissmatch", sourceDownloadPolicy.fileExistsAndProvidedChecksumMissmatch);
+						overrideBool("AssetDownloadPolicy/fileExistsAndProvidedChecksumMatch", sourceDownloadPolicy.fileExistsAndProvidedChecksumMatch);
+						overrideBool("AssetUsagePolicy/fileMissing", sourceUsagePolicy.fileMissing);
+						overrideBool("AssetUsagePolicy/fileTooSmall", sourceUsagePolicy.fileTooSmall);
+						overrideBool("AssetUsagePolicy/fileExistsAndNoChecksumProvided", sourceUsagePolicy.fileExistsAndNoChecksumProvided);
+						overrideBool("AssetUsagePolicy/fileExistsAndProvidedChecksumMissmatch", sourceUsagePolicy.fileExistsAndProvidedChecksumMissmatch);
+						overrideBool("AssetUsagePolicy/fileExistsAndProvidedChecksumMatch", sourceUsagePolicy.fileExistsAndProvidedChecksumMatch);
+						overrideBool("ObjectUsagePolicy/allAssetsAreOK", sourceObjectPolicy.allObjectAssetsAreOK);
+						overrideInt("ObjectUsagePolicy/minNumberImgAssets", sourceObjectPolicy.minNumberOfImageAssets);
+						overrideInt("ObjectUsagePolicy/minNumberVideoAssets", sourceObjectPolicy.minNumberOfVideoAssets);
+						overrideInt("ObjectUsagePolicy/minNumberAudioAssets", sourceObjectPolicy.minNumberOfAudioAssets);
 						int numConcurrentDownloads = getInt("Downloads/maxConcurrentDownloads");
 						int numThreads = getInt("App/maxThreads");
 
@@ -1541,9 +1567,9 @@ void App::onSetState(ofxStateMachine<State>::StateChangedEventArgs& change){
 																contentHttpConfigs[currentContentID].proxyCfg,
 																contentHttpConfigs[currentContentID].customHeaders,
 																contentParseFuncs[currentContentID],
-																assetDownloadPolicy,
-																assetUsagePolicy,
-																objectUsagePolicy,
+																													sourceDownloadPolicy,
+																													sourceUsagePolicy,
+																													sourceObjectPolicy,
 																assetDownloadLocation,
 																skipChecksums,
 																assetErrorsScreenReportTimeSeconds

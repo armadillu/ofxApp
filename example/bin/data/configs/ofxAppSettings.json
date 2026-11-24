@@ -279,6 +279,16 @@
 				"useOfflineJson" : false, //if true: ignore the live URL and use a local cache of the last version of the API response for this endpoint
 				"skipChecksumTests" : false, //if true, ofxApp will not check local asset status, leading to a faster boot, but potentially incorrect state. Never use in production
 				"removeUnusedAssets" : true, //if false, ofxApp will not do cleanup and keep assets in disk even if they disappear from the content JSON (for this countent source)
+				// Optional per-source overrides: omitted fields inherit the global Content policies below.
+				"AssetDownloadPolicy" : {
+					"fileTooSmall" : true
+				},
+				"AssetUsagePolicy" : {
+					"fileExistsAndNoChecksumProvided" : true
+				},
+				"ObjectUsagePolicy" : {
+					"minNumberImgAssets" : 0
+				},
 				"liveUpdates" : { //if enabled, ofxApp will hit that endPoint every "interval seconds" and call ofxAppContentUpdate() on the delegate
 					"enabled" : false,
 					"interval" : 60.0, //seconds

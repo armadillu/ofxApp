@@ -371,6 +371,8 @@ Each Content Source must have a few fields defined:
 * `assetsLocation`: this is the path where the assets referenced in every object inside the JSON will be downloaded.
 * `shouldSkipObjectPolicyTests `: this bool allows skipping the policy tests (more on that later) to accept all the objects in the JSON regardless - usually you want this to be false.
 
+Each source may also define `AssetDownloadPolicy`, `AssetUsagePolicy`, and `ObjectUsagePolicy` objects. Their fields override the corresponding global `Content` policy fields for that source only; omitted fields inherit the global values. See the `CH` source in the example settings. `shouldSkipObjectPolicyTests` still skips the object policy tests for that source when enabled. Asset catalog callbacks can further customize the asset policies passed to `AssetHolder::setup`.
+
 If you suddenly have another content source, just add it in that section with its own unique contentID. _ofxApp_ will ingest the content in that source during the startup phases (more on that later).
 
 ---
