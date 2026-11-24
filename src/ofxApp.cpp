@@ -485,10 +485,6 @@ void App::setupTextureLoaderRemoteUI(){
 					-lodBiasRange, lodBiasRange);
 	rui->setDescriptionForLastAddedParam("Applies to new requests. Negative values sharpen mipmaps.");
 
-	rui->shareParam("Texture loader verbose logging",
-					[queue]{ return queue->getVerbose(); },
-					[queue](bool verbose){ queue->setVerbose(verbose); });
-	rui->setDescriptionForLastAddedParam("Enables debug logging for new requests.");
 }
 
 
